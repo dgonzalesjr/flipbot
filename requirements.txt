@@ -1,4 +1,8 @@
-langchain
-openai
-tqdm
+requests
 python-dotenv
+schedule
+stripe
+discord.py
+langchain
+langchain-openai
+openai

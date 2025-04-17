@@ -43,7 +43,8 @@ def search_ebay_pokemon_cards(keywords="pokemon", max_price=200, limit=5):
     results = []
     for item in items:
         title = item.get("title", [""])[0]
-        price = item.get("sellingStatus", [{}])[0].get("currentPrice", [{}])[0].get("__value__", "0")
+        price = item.get(
+            "sellingStatus", [{}])[0].get("currentPrice", [{}])[0].get("__value__", "0")
         url = item.get("viewItemURL", [""])[0]
         results.append({
             "title": title,

@@ -7,7 +7,7 @@ from logger import open_csv
 def run_flipbot():
     listings = get_ebay_listings()
 
-    for l in listings:
+    for listing in listings:
         print(f"\n🛒 {l['title']}")
         parsed = parse_listing(l["title"])
         print(f"🧠 Parsed → {parsed}")

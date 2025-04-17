@@ -17,7 +17,8 @@ llm = ChatOpenAI(
 
 # Define prompt template for parsing listings
 prompt = ChatPromptTemplate.from_template("""
-You are an expert in Pokémon card trading. Given a raw marketplace listing title and price, extract and normalize the card information.
+You are an expert in Pokémon card trading. Given a raw marketplace listing 
+title and price, extract and normalize the card information.
 
 Input:
 "{listing}"

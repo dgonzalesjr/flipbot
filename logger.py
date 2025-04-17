@@ -14,10 +14,27 @@ def log_match(card_name, price, buyer_max, url):
         writer = csv.writer(file)
         if not file_exists:
             # Write header if file is new
-            writer.writerow(["Timestamp", "Card Name", "Price", "Buyer Max", "URL", "Margin"])
+            writer.writerow(
+                [
+                    "Timestamp",
+                    "Card Name",
+                    "Price",
+                    "Buyer Max",
+                    "URL",
+                    "Margin"
+                 ]
+                )
 
         margin = float(buyer_max) - float(price)
-        writer.writerow([datetime.now(), card_name, price, buyer_max, url, margin])
+        writer.writerow(
+            [
+                datetime.now(),
+                card_name, price,
+                buyer_max,
+                url,
+                margin
+                ]
+            )
 
 
 def open_csv():

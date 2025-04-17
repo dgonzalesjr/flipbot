@@ -25,7 +25,10 @@ def send_discord_alert(card_name, price, buyer_max, url, checkout_url=None):
     message = {
         "embeds": [{
             "title": f"🎯 MATCH FOUND: {card_name}",
-            "description": f"**Price**: ${price}\n**Buyer Max**: ${buyer_max}\n[View Listing]({url})",
+            "description": (
+                f"**Price**: ${price}\n**Buyer Max**:"
+                f"${buyer_max}\n[View Listing]({url})"
+                ),
             "color": 0x00ff00,  # green highlight
             "footer": {"text": "FlipBot Auto Arbitrage"},
             # Optional thumbnail

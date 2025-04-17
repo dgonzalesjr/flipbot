@@ -16,7 +16,7 @@ def create_checkout_session(card_name, price, url):
                         'name': f"Pokémon Flip: {card_name}",
                         'description': f"Direct flip deal from {url}",
                     },
-                    'unit_amount': int(float(price) * 100),  # Stripe needs cents
+                    'unit_amount': int(float(price) * 100),  # Cents for stripe
                 },
                 'quantity': 1,
             }],
