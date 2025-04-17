@@ -8,8 +8,8 @@ def run_flipbot():
     listings = get_ebay_listings()
 
     for listing in listings:
-        print(f"\n🛒 {l['title']}")
-        parsed = parse_listing(l["title"])
+        print(f"\n🛒 {listing['title']}")
+        parsed = parse_listing(listing["title"])
         print(f"🧠 Parsed → {parsed}")
         result = match_listing(parsed, buyers)
         print(result)

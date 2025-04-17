@@ -60,5 +60,5 @@ if __name__ == "__main__":
     if not listings:
         print("🚫 No listings found.")
     else:
-        for l in listings:
-            print(f"🎴 {l['title']} - ${l['price']} - {l['url']}")
+        for listing in listings:
+            print(f"🎴 {listing['title']} - ${listing['price']} - {listing['url']}")

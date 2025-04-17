@@ -22,8 +22,8 @@ def log_match(card_name, price, buyer_max, url):
                     "Buyer Max",
                     "URL",
                     "Margin"
-                 ]
-                )
+                ]
+            )
 
         margin = float(buyer_max) - float(price)
         writer.writerow(
@@ -33,8 +33,8 @@ def log_match(card_name, price, buyer_max, url):
                 buyer_max,
                 url,
                 margin
-                ]
-            )
+            ]
+        )
 
 
 def open_csv():

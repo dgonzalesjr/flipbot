@@ -28,7 +28,7 @@ def send_discord_alert(card_name, price, buyer_max, url, checkout_url=None):
             "description": (
                 f"**Price**: ${price}\n**Buyer Max**:"
                 f"${buyer_max}\n[View Listing]({url})"
-                ),
+            ),
             "color": 0x00ff00,  # green highlight
             "footer": {"text": "FlipBot Auto Arbitrage"},
             # Optional thumbnail

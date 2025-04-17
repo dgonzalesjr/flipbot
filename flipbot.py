@@ -26,7 +26,7 @@ async def flip(ctx):
     )
     embed.add_field(
         name="Listing", value="[View Card](https://example.com)", inline=False
-        )
+    )
 
     view = discord.ui.View()
     view.add_item(
