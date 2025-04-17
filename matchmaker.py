@@ -6,13 +6,10 @@ import random
 from search_ebay_browse import search_ebay_items
 from logger import log_match
 from notifier import send_discord_alert
+from buyer_loader import get_buyers_from_sheet
 
 # Simulated buyer demand (like Reddit WTB posts)
-buyers = [
-    {"card_name": "Charizard", "max_price": 400},
-    {"card_name": "Shining Magikarp", "max_price": 200},
-    {"card_name": "Blaine's Arcanine", "max_price": 100},
-]
+buyers = get_buyers_from_sheet()
 
 
 def match_listing(parsed_output, buyers):
