@@ -1,6 +1,4 @@
 [flake8]
 exclude = venv,.git,__pycache__,build,dist
 max-line-length = 120
-ignore =
-    E203,  # Whitespace before ':', safe to ignore for Black compatibility
-    W503,  # Line break before binary operator (also safe to ignore)
+ignore = E203,W503
