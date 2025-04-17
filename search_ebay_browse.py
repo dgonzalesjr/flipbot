@@ -39,7 +39,7 @@ def get_ebay_token():
         "https://api.ebay.com/identity/v1/oauth2/token",
         headers=headers,
         data=data
-        )
+    )
 
     if response.status_code != 200:
         print("❌ Error status code:", response.status_code)

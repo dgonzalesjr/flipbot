@@ -1,6 +1,7 @@
 import requests
 
-WEBHOOK_URL = "https://discord.com/api/webhooks/1361856276740702318/iRBBHAn1p-qRBUp9wor7SQ2h32qtisAAhlYG-KdFQUCGLg6SegXsVNrZgkMoP6Ly0lkx"
+WEBHOOK_URL = "https://discord.com/api/webhooks/1361856276740702318/"
+"iRBBHAn1p-qRBUp9wor7SQ2h32qtisAAhlYG-KdFQUCGLg6SegXsVNrZgkMoP6Ly0lkx"
 
 payload = {
     "embeds": [{
