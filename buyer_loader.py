@@ -16,7 +16,7 @@ def get_buyers_from_sheet():
         creds = ServiceAccountCredentials.from_json_keyfile_name("google_creds.json", scope)
 
     client = gspread.authorize(creds)
-    sheet = client.open("Buyer Leads").sheet1
+    sheet = client.open_by_key("1-UeGHaPDIbCSLTLUGrbvxyg-HruNyQNMa-zMsHbDVq8").sheet1
     data = sheet.get_all_records()
 
     # Transform into FlipBot-compatible buyer objects
