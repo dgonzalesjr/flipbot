@@ -10,6 +10,11 @@ LOG_FILE = "flip_log.csv"
 def log_match(card_name, price, buyer_max, url):
     file_exists = os.path.isfile(LOG_FILE)
 
+    try:
+        margin = float(buyer_max) - float(price)
+    except (ValueError, TypeError):
+        margin = "N/A"
+
     with open(LOG_FILE, mode="a", newline="") as file:
         writer = csv.writer(file)
         if not file_exists:
@@ -24,12 +29,11 @@ def log_match(card_name, price, buyer_max, url):
                     "Margin"
                 ]
             )
-
-        margin = float(buyer_max) - float(price)
         writer.writerow(
             [
                 datetime.now(),
-                card_name, price,
+                card_name,
+                price,
                 buyer_max,
                 url,
                 margin
