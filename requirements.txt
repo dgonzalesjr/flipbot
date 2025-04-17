@@ -6,3 +6,5 @@ discord.py
 langchain
 langchain-openai
 openai
+gspread
+oauth2client
