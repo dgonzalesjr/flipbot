@@ -6,6 +6,17 @@ load_dotenv()
 WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK")
 
 
+def get_card_image_url(card_name):
+    card_name = card_name.lower()
+    if "charizard" in card_name:
+        return "https://images.pokemontcg.io/base1/4_hires.png"
+    if "magikarp" in card_name:
+        return "https://images.pokemontcg.io/neo3/66_hires.png"
+    if "arcanine" in card_name:
+        return "https://images.pokemontcg.io/gym2/6_hires.png"
+    return "https://images.pokemontcg.io/base1/1_hires.png"  # fallback
+
+
 def send_discord_alert(card_name, price, buyer_max, url, checkout_url=None):
     if not WEBHOOK_URL:
         print("🚫 No webhook URL set.")
