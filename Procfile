@@ -1,1 +1,1 @@
-worker: python matchmaker.py
+web: python server.py

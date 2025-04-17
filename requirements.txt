@@ -8,3 +8,5 @@ langchain-openai
 openai
 gspread
 oauth2client
+uvicorn
+FastAPI
