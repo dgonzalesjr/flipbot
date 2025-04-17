@@ -93,3 +93,7 @@ if __name__ == "__main__":
         while True:
             schedule.run_pending()
             time.sleep(1)
+
+
+def run_flipbot():
+    match_from_browse_api()
