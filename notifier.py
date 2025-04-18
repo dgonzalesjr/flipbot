@@ -22,28 +22,19 @@ def send_discord_alert(card_name, price, buyer_max, url, checkout_url=None):
         print("🚫 No webhook URL set.")
         return
 
-    message_content = (
-        f"🎯 **MATCH FOUND**\n"
-        f"**Card**: {card_name}\n"
-        f"**Price**: ${price}\n"
-        f"**Buyer Max**: ${buyer_max}\n"
-        f"🔗 [View Listing]({url})"
-    )
-
-    if checkout_url:
-        message_content += f"\n💳 [Buy Now]({checkout_url})"
+    image_url = get_card_image_url(card_name)
 
     message = {
         "embeds": [{
             "title": f"🎯 MATCH FOUND: {card_name}",
             "description": (
-                f"**Price**: ${price}\n**Buyer Max**:"
-                f"${buyer_max}\n[View Listing]({url})"
+                f"**Price**: ${price}\n"
+                f"**Buyer Max**: ${buyer_max}\n"
+                f"[View Listing]({url})"
             ),
-            "color": 0x00ff00,  # green highlight
-            "footer": {"text": "FlipBot Auto Arbitrage"},
-            # Optional thumbnail
-            # "thumbnail": {"url": "https://your-image-link.com/card.jpg"}
+            "color": 0x00ff00,  # green
+            "image": {"url": image_url},
+            "footer": {"text": "FlipBot Auto Arbitrage"}
         }],
         "components": [
             {
