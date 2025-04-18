@@ -6,13 +6,11 @@ import random
 from search_ebay_browse import search_ebay_items
 from logger import log_match
 from notifier import send_discord_alert
-# from buyer_loader import get_buyers_from_sheet
+from stripe_checkout import create_checkout_session  # ✅ Import Stripe checkout
 
-# Simulated buyer demand (like Reddit WTB posts)
-# buyers = get_buyers_from_sheet()
-
-buyers = buyers = [
-    {"card_name": "Shining Magikarp", "max_price": 1000},  # Set high on purpose
+# Simulated buyer demand (can replace with sheet/API later)
+buyers = [
+    {"card_name": "Shining Magikarp", "max_price": 1000},
     {"card_name": "Charizard", "max_price": 1000},
     {"card_name": "Blaine's Arcanine", "max_price": 1000}
 ]
@@ -29,16 +27,26 @@ def match_listing(parsed_output, buyers):
     for buyer in buyers:
         if buyer["card_name"].lower() in parsed["card_name"].lower():
             if parsed["price"] <= buyer["max_price"]:
+                # ✅ Create Stripe checkout link
+                checkout_url = create_checkout_session(
+                    card_name=parsed["card_name"],
+                    price=parsed["price"],
+                    url=parsed.get("url", "https://example.com")
+                )
+
+                # ✅ Send Discord alert with Stripe link
                 send_discord_alert(
                     card_name=parsed["card_name"],
                     price=parsed["price"],
                     buyer_max=buyer["max_price"],
-                    url=parsed.get("url", "https://example.com")
+                    url=parsed.get("url", "https://example.com"),
+                    checkout_url=checkout_url
                 )
+
                 matched = True
                 break
 
-    # Log all listings, even if no match
+    # ✅ Log result (match or not)
     log_match(
         card_name=parsed["card_name"],
         price=parsed["price"],
@@ -80,10 +88,14 @@ def match_from_browse_api(queries=None, limit=10):
             match_message = match_listing(json.dumps(parsed), buyers)
             print(match_message)
 
-        # Rate limit buffer between queries
+        # ⏳ Wait a bit between queries to avoid hammering API
         delay = random.uniform(1.5, 3.0)
         print(f"⏳ Waiting {delay:.2f} seconds before next query...")
         time.sleep(delay)
+
+
+def run_flipbot():
+    match_from_browse_api()
 
 
 if __name__ == "__main__":
@@ -96,7 +108,3 @@ if __name__ == "__main__":
         while True:
             schedule.run_pending()
             time.sleep(1)
-
-
-def run_flipbot():
-    match_from_browse_api()
