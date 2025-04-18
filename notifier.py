@@ -30,30 +30,18 @@ def send_discord_alert(card_name, price, buyer_max, url, checkout_url=None):
             "description": (
                 f"**Price**: ${price}\n"
                 f"**Buyer Max**: ${buyer_max}\n"
-                f"[View Listing]({url})"
+                f"[🔗 View Listing]({url})\n"
+                f"[💳 Buy Now]({checkout_url if checkout_url else url})"
             ),
-            "color": 0x00ff00,  # green
+            "color": 0x00ff00,
             "image": {"url": image_url},
             "footer": {"text": "FlipBot Auto Arbitrage"}
-        }],
-        "components": [
-            {
-                "type": 1,  # Action row
-                "components": [
-                    {
-                        "type": 2,  # Button
-                        "label": "💳 Buy Now",
-                        "style": 5,  # Link button
-                        "url": checkout_url if checkout_url else url
-                    }
-                ]
-            }
-        ]
+        }]
     }
 
     response = requests.post(WEBHOOK_URL, json=message)
 
-    if response.status_code == 204:
+    if response.status_code == 204 or response.status_code == 200:
         print("✅ Discord alert sent!")
     else:
         print(f"⚠️ Discord error: {response.status_code} - {response.text}")
