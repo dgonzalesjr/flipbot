@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlipBot Shipping Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <form action="https://formspree.io/f/myzeqwkj" method="POST" class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg space-y-4">
+    <h1 class="text-2xl font-bold text-gray-800 text-center">📦 Shipping Details</h1>
+
+    <input type="hidden" name="card_name" value="(Stripe flip - auto-filled later if needed)" />
+
+    <label class="block">
+      <span class="text-gray-700">Full Name</span>
+      <input type="text" name="name" class="form-input mt-1 block w-full" required />
+    </label>
+
+    <label class="block">
+      <span class="text-gray-700">Email</span>
+      <input type="email" name="email" class="form-input mt-1 block w-full" required />
+    </label>
+
+    <label class="block">
+      <span class="text-gray-700">Shipping Address</span>
+      <textarea name="address" class="form-textarea mt-1 block w-full" rows="4" required></textarea>
+    </label>
+
+    <label class="block">
+      <span class="text-gray-700">Discord Username (optional)</span>
+      <input type="text" name="discord" class="form-input mt-1 block w-full" />
+    </label>
+
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+      Submit Shipping Info
+    </button>
+  </form>
+</body>
+</html>
