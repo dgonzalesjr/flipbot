@@ -8,10 +8,12 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
   <form 
-    action="https://formspree.io/f/myzeqwkj" 
-    method="POST" 
-    class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg space-y-4"
-  >
+  id="shippingForm"
+  action="https://formspree.io/f/myzeqwkj" 
+  method="POST" 
+  class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg space-y-4"
+>
+
     <h1 class="text-2xl font-bold text-gray-800 text-center">📦 Shipping Details</h1>
 
     <!-- Hidden field to store card name -->
@@ -79,13 +81,35 @@
     </noscript>
   </form>
 
-  <script>
-    // Auto-fill card name from query string
-    const urlParams = new URLSearchParams(window.location.search);
-    const cardName = urlParams.get("card_name");
-    if (cardName) {
-      document.getElementById("card_name").value = cardName.replace(/\+/g, " ");
-    }
-  </script>
+<script>
+  // Auto-fill card name from query string
+  const urlParams = new URLSearchParams(window.location.search);
+  const cardName = urlParams.get("card_name");
+  if (cardName) {
+    document.getElementById("card_name").value = cardName.replace(/\+/g, " ");
+  }
+
+  // Manually handle redirect after submission
+  const form = document.getElementById("shippingForm");
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); // Stop default submit
+
+    const formData = new FormData(form);
+    
+    fetch(form.action, {
+      method: form.method,
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(() => {
+      // Redirect with query param
+      const redirectUrl = `https://dgonzalesjr.github.io/flipbot/success.html?card_name=${encodeURIComponent(formData.get("card_name"))}`;
+      window.location.href = redirectUrl;
+    }).catch(() => {
+      alert("There was a problem submitting your form. Please try again.");
+    });
+  });
+</script>
 </body>
 </html>
