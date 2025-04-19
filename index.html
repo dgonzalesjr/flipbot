@@ -14,27 +14,58 @@
   >
     <h1 class="text-2xl font-bold text-gray-800 text-center">📦 Shipping Details</h1>
 
+    <!-- Hidden field to store card name -->
     <input type="hidden" name="card_name" id="card_name" value="">
 
     <label class="block">
       <span class="text-gray-700">Full Name</span>
-      <input type="text" name="name" class="form-input mt-1 block w-full" required />
+      <input 
+        type="text" 
+        name="name" 
+        class="form-input mt-1 block w-full" 
+        required 
+        autocomplete="name"
+      />
     </label>
 
     <label class="block">
       <span class="text-gray-700">Email</span>
-      <input type="email" name="email" class="form-input mt-1 block w-full" required />
+      <input 
+        type="email" 
+        name="email" 
+        class="form-input mt-1 block w-full" 
+        required 
+        autocomplete="email"
+      />
     </label>
 
     <label class="block">
       <span class="text-gray-700">Shipping Address</span>
-      <textarea name="address" class="form-textarea mt-1 block w-full" rows="4" required></textarea>
+      <textarea 
+        name="address" 
+        class="form-textarea mt-1 block w-full" 
+        rows="4" 
+        required 
+        autocomplete="shipping street-address"
+      ></textarea>
     </label>
 
     <label class="block">
       <span class="text-gray-700">Discord Username (optional)</span>
-      <input type="text" name="discord" class="form-input mt-1 block w-full" />
+      <input 
+        type="text" 
+        name="discord" 
+        class="form-input mt-1 block w-full" 
+        autocomplete="off"
+      />
     </label>
+
+    <!-- Redirect to custom success page -->
+    <input 
+      type="hidden" 
+      name="_redirect" 
+      value="https://dgonzalesjr.github.io/flipbot/success.html"
+    >
 
     <button 
       type="submit" 
@@ -43,14 +74,13 @@
       Submit Shipping Info
     </button>
 
-    <input type="hidden" name="_redirect" value="https://dgonzalesjr.github.io/flipbot/success.html">
-
     <noscript>
       <p class="text-red-600 text-sm mt-2">⚠️ JavaScript is required to auto-fill card name.</p>
     </noscript>
   </form>
 
   <script>
+    // Auto-fill card name from query string
     const urlParams = new URLSearchParams(window.location.search);
     const cardName = urlParams.get("card_name");
     if (cardName) {
