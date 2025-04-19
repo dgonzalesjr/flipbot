@@ -19,21 +19,14 @@
         📦 Shipping Details
       </h1>
 
-      <!-- Redirect after success -->
+      <!-- Autofilled by Stripe or URL -->
       <input
         type="hidden"
-        name="_redirect"
-        value="https://dgonzalesjr.github.io/flipbot/success.html"
-      />
-
-      <!-- Optional: Card name -->
-      <input
-        type="hidden"
+        id="card_name"
         name="card_name"
         value="Stripe Flip – auto-filled later if needed"
       />
 
-      <!-- Full Name -->
       <label class="block">
         <span class="text-gray-700">Full Name</span>
         <input
@@ -44,7 +37,6 @@
         />
       </label>
 
-      <!-- Email -->
       <label class="block">
         <span class="text-gray-700">Email</span>
         <input
@@ -55,18 +47,16 @@
         />
       </label>
 
-      <!-- Shipping Address -->
       <label class="block">
         <span class="text-gray-700">Shipping Address</span>
         <textarea
           name="address"
-          rows="4"
           class="form-textarea mt-1 block w-full"
+          rows="4"
           required
         ></textarea>
       </label>
 
-      <!-- Discord Username (optional) -->
       <label class="block">
         <span class="text-gray-700">Discord Username (optional)</span>
         <input
@@ -76,13 +66,26 @@
         />
       </label>
 
-      <!-- Submit -->
       <button
         type="submit"
         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
       >
         Submit Shipping Info
       </button>
+
+      <input
+        type="hidden"
+        name="_redirect"
+        value="https://dgonzalesjr.github.io/flipbot/success.html"
+      />
     </form>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const cardName = urlParams.get("card_name");
+      if (cardName) {
+        document.getElementById("card_name").value = decodeURIComponent(cardName);
+      }
+    </script>
   </body>
 </html>
