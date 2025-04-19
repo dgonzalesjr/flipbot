@@ -1,18 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-green-100 text-gray-900">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FlipBot – Thank You!</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  </head>
-  <body class="min-h-screen flex items-center justify-center px-4">
-    <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-md text-center">
-      <h1 class="text-3xl font-bold text-green-600 mb-4">✅ Shipping Info Received!</h1>
-      <p class="text-gray-700 mb-4">Thanks for your purchase — your FlipBot card is being processed and we’ll ship it soon.</p>
-      <a href="https://dgonzalesjr.github.io/flipbot/" class="inline-block mt-4 text-indigo-600 hover:underline">
-        ← Back to FlipBot
-      </a>
-    </div>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎉 Thank You - FlipBot</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white shadow-lg rounded-lg p-10 max-w-md w-full text-center">
+    <h1 class="text-3xl font-bold text-green-600 mb-4">🎉 Thanks for your order!</h1>
+    <p class="text-gray-700 text-lg mb-2">We've received your shipping details.</p>
+    <p class="text-gray-600 mb-4" id="cardMessage">You successfully claimed your card!</p>
+
+    <a href="https://www.ebay.com" target="_blank" class="text-blue-600 underline">Return to eBay</a>
+  </div>
+
+  <script>
+    // Trigger confetti!
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+
+    // Show card name from query param
+    const params = new URLSearchParams(window.location.search);
+    const cardName = params.get("card_name");
+    if (cardName) {
+      const cardMessage = document.getElementById("cardMessage");
+      cardMessage.textContent = `🎴 You successfully claimed: ${cardName.replace(/\+/g, " ")}`;
+    }
+  </script>
+</body>
 </html>
