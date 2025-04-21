@@ -19,14 +19,8 @@ def trigger():
 
 @app.post("/api/form-submitted")
 async def form_submitted(request: Request):
-    try:
-        data = await request.json()
-        logging.info(f"Form data received: {data}")
-        # Fulfillment logic
-        return {"status": "received"}
-    except Exception as e:
-        logging.error(f"Error processing form: {e}")
-        return {"status": "error", "detail": str(e)}
+    data = await request.json()
+    print("📬 Form data received:", data)  # <- Required for confirmation in logs
 
 
 if __name__ == "__main__":
