@@ -21,8 +21,8 @@ def create_checkout_session(card_name, price, url):
                 'quantity': 1,
             }],
             mode='payment',
-            success_url='https://example.com/success',
-            cancel_url='https://example.com/cancel',
+            success_url=f'https://dgonzalesjr.github.io/flipbot/?card_name={card_name}',
+            cancel_url='https://dgonzalesjr.github.io/flipbot/',
         )
         return session.url
     except Exception as e:
