@@ -14,14 +14,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def home():
     return {"message": "FlipBot is alive!"}
+
 
 @app.post("/trigger")
 def trigger():
     run_flipbot()
     return {"status": "FlipBot triggered!"}
+
 
 @app.post("/api/form-submitted")
 async def form_submitted(request: Request):
