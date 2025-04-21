@@ -1,9 +1,17 @@
 from fastapi import FastAPI, Request
 import uvicorn
-import logging
+from fastapi.middleware.cors import CORSMiddleware
+
 from matchmaker import run_flipbot
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://dgonzalesjr.github.io"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
