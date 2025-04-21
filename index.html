@@ -15,7 +15,12 @@
 
     <h1 class="text-2xl font-bold text-gray-800 text-center">📦 Shipping Details</h1>
 
+    <!-- Hidden field to store card name -->
     <input type="hidden" name="card_name" id="card_name" value="">
+
+    <!-- Hidden field to store eBay item ID -->
+    <input type="hidden" name="ebay_item_id" id="ebay_item_id" value="">
+
 
     <label class="block">
       <span class="text-gray-700">Full Name</span>
@@ -73,10 +78,16 @@
   </form>
 
   <script>
+    // Auto-fill card name from query string
     const urlParams = new URLSearchParams(window.location.search);
     const cardName = urlParams.get("card_name");
+    const itemId = urlParams.get("item_id");
+
     if (cardName) {
       document.getElementById("card_name").value = cardName.replace(/\+/g, " ");
+    }
+    if (itemId) {
+      document.getElementById("ebay_item_id").value = itemId;
     }
 
     const form = document.getElementById("shippingForm");
