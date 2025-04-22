@@ -6,9 +6,9 @@ import random
 from search_ebay_browse import search_ebay_items
 from logger import log_match
 from notifier import send_discord_alert
-from stripe_checkout import create_checkout_session  # ✅ Import Stripe checkout
+from utils.margin_calc import calculate_margin
 
-# Simulated buyer demand (can replace with sheet/API later)
+# Simulated buyer demand
 buyers = [
     {"card_name": "Shining Magikarp", "max_price": 1000},
     {"card_name": "Charizard", "max_price": 1000},
@@ -27,26 +27,31 @@ def match_listing(parsed_output, buyers):
     for buyer in buyers:
         if buyer["card_name"].lower() in parsed["card_name"].lower():
             if parsed["price"] <= buyer["max_price"]:
-                # ✅ Create Stripe checkout link
-                checkout_url = create_checkout_session(
-                    card_name=parsed["card_name"],
-                    price=parsed["price"],
-                    url=parsed.get("url", "https://example.com")
+
+                # 🧠 New: Calculate margin before proceeding
+                result = calculate_margin(
+                    ebay_price=parsed["price"],
+                    stripe_sale_price=buyer["max_price"]
                 )
 
-                # ✅ Send Discord alert with Stripe link
+                if not result["should_buy"]:
+                    print(
+                        f"❌ Skipping {parsed['card_name']} — margin too low:"
+                        f" ${result['net_profit']} ({result['margin_percent']}%)"
+                    )
+                    return f"⚠️ Margin too low: {parsed['card_name']}"
+
+                # ✅ Proceed with alert
                 send_discord_alert(
                     card_name=parsed["card_name"],
                     price=parsed["price"],
                     buyer_max=buyer["max_price"],
-                    url=parsed.get("url", "https://example.com"),
-                    checkout_url=checkout_url
+                    url=parsed.get("url", "https://example.com")
                 )
-
                 matched = True
                 break
 
-    # ✅ Log result (match or not)
+    # Log all listings regardless of match
     log_match(
         card_name=parsed["card_name"],
         price=parsed["price"],
@@ -88,7 +93,6 @@ def match_from_browse_api(queries=None, limit=10):
             match_message = match_listing(json.dumps(parsed), buyers)
             print(match_message)
 
-        # ⏳ Wait a bit between queries to avoid hammering API
         delay = random.uniform(1.5, 3.0)
         print(f"⏳ Waiting {delay:.2f} seconds before next query...")
         time.sleep(delay)
