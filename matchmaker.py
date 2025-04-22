@@ -7,7 +7,7 @@ from search_ebay_browse import search_ebay_items
 from logger import log_match
 from notifier import send_discord_alert
 from utils.margin_calc import calculate_margin
-from stripe_checkout import create_checkout_session  # ✅ Add this
+from stripe_checkout import create_checkout_session
 
 # Simulated buyer demand
 buyers = [
@@ -15,13 +15,6 @@ buyers = [
     {"card_name": "Charizard", "max_price": 1000},
     {"card_name": "Blaine's Arcanine", "max_price": 1000}
 ]
-
-
-def extract_item_id_from_url(url):
-    try:
-        return url.split("/")[-1].split("?")[0]
-    except Exception:
-        return "unknown"
 
 
 def match_listing(parsed_output, buyers):
@@ -35,8 +28,7 @@ def match_listing(parsed_output, buyers):
     for buyer in buyers:
         if buyer["card_name"].lower() in parsed["card_name"].lower():
             if parsed["price"] <= buyer["max_price"]:
-
-                # 🧠 Calculate margin
+                # 🧠 Check profit margin
                 result = calculate_margin(
                     ebay_price=parsed["price"],
                     stripe_sale_price=buyer["max_price"]
@@ -44,38 +36,34 @@ def match_listing(parsed_output, buyers):
 
                 if not result["should_buy"]:
                     print(
-                        f"❌ Skipping {parsed['card_name']} — margin too low: "
-                        f"${result['net_profit']} ({result['margin_percent']}%)"
+                        f"❌ Skipping {parsed['card_name']} — margin too low:"
+                        f" ${result['net_profit']} ({result['margin_percent']}%)"
                     )
                     return f"⚠️ Margin too low: {parsed['card_name']}"
 
-                # 🛒 Create Stripe Checkout session
-                item_id = extract_item_id_from_url(parsed.get("url", ""))
+                # ✅ Create Stripe Checkout session
                 checkout_url = create_checkout_session(
                     card_name=parsed["card_name"],
-                    price=parsed["price"],
-                    url=parsed.get("url", ""),
-                    item_id=item_id
+                    price=buyer["max_price"],
+                    url=parsed.get("url", "https://example.com")
                 )
 
-                # 📢 Send Discord alert with Stripe link
+                # ✅ Send alert
                 send_discord_alert(
                     card_name=parsed["card_name"],
                     price=parsed["price"],
                     buyer_max=buyer["max_price"],
-                    url=parsed.get("url", ""),
-                    checkout_url=checkout_url  # ✅ overrides default link
+                    url=checkout_url
                 )
-
                 matched = True
                 break
 
-    # 📝 Log all listings
+    # Log all listings
     log_match(
         card_name=parsed["card_name"],
         price=parsed["price"],
         buyer_max=buyer["max_price"] if matched else "N/A",
-        url=parsed.get("url", "")
+        url=parsed.get("url", "https://example.com")
     )
 
     if matched:
