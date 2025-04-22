@@ -25,6 +25,7 @@ app.add_middleware(
 )
 
 
+# Routes
 @app.get("/")
 def home():
     return {"message": "FlipBot is alive!"}
