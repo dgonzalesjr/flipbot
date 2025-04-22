@@ -18,7 +18,7 @@ init_db()
 # Allow GitHub Pages access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://dgonzalesjr.github.io"],
+    allow_origins=["*"],  # ⛔ TEMP ONLY
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
