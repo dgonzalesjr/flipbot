@@ -1,5 +1,6 @@
 import os
 import stripe
+import urllib.parse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,7 +22,7 @@ def create_checkout_session(card_name, price, url):
                 'quantity': 1,
             }],
             mode='payment',
-            success_url=f'https://dgonzalesjr.github.io/flipbot/?card_name={card_name}',
+            success_url=f'https://dgonzalesjr.github.io/flipbot/?card_name={urllib.parse.quote(card_name)}',
             cancel_url='https://dgonzalesjr.github.io/flipbot/',
         )
         return session.url
