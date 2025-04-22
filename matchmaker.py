@@ -34,6 +34,9 @@ def match_listing(parsed_output, buyers):
                     stripe_sale_price=buyer["max_price"]
                 )
 
+                # 📊 Log margin details even if not matched
+                print(f"📊 Margin check for {parsed['card_name']}: {result}")
+
                 if not result["should_buy"]:
                     print(
                         f"❌ Skipping {parsed['card_name']} — margin too low:"
