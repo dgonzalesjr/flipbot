@@ -21,7 +21,6 @@
     <!-- Hidden field to store eBay item ID -->
     <input type="hidden" name="ebay_item_id" id="ebay_item_id" value="">
 
-
     <label class="block">
       <span class="text-gray-700">Full Name</span>
       <input 
@@ -78,7 +77,6 @@
   </form>
 
   <script>
-    // Auto-fill card name from query string
     const urlParams = new URLSearchParams(window.location.search);
     const cardName = urlParams.get("card_name");
     const itemId = urlParams.get("item_id");
@@ -95,20 +93,22 @@
       event.preventDefault();
 
       const formData = new FormData(form);
-      console.log("📝 Submitting form data:", Object.fromEntries(formData.entries()));
+      const data = Object.fromEntries(formData.entries());
+
+      console.log("📝 Submitting JSON form data:", data);
 
       fetch("https://worker-production-e924.up.railway.app/api/form-submitted", {
         method: "POST",
-        body: formData,
         headers: {
-          'Accept': 'application/json'
-        }
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
       }).then((response) => {
         if (!response.ok) {
           throw new Error(`Server returned status ${response.status}`);
         }
 
-        const redirectUrl = `https://dgonzalesjr.github.io/flipbot/success.html?card_name=${encodeURIComponent(formData.get("card_name"))}`;
+        const redirectUrl = `https://dgonzalesjr.github.io/flipbot/success.html?card_name=${encodeURIComponent(data.card_name)}`;
         console.log("✅ Redirecting to success page:", redirectUrl);
         window.location.href = redirectUrl;
       }).catch((error) => {

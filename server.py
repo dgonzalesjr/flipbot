@@ -39,7 +39,12 @@ def trigger():
 
 @app.post("/api/form-submitted")
 async def form_submitted(request: Request):
-    data = await request.json()
+    try:
+        data = await request.json()
+    except Exception as e:
+        logging.error(f"❌ Failed to parse JSON body: {e}")
+        return {"error": "Invalid JSON payload."}
+
     logging.info("📬 Received form submission.")
 
     item_id = data.get("ebay_item_id")
@@ -74,6 +79,7 @@ async def form_submitted(request: Request):
     )
 
     return {"status": "received"}
+
 
 if __name__ == "__main__":
     uvicorn.run("server:app", host="0.0.0.0", port=8000)
