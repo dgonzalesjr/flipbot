@@ -47,6 +47,7 @@ async def form_submitted(request: Request):
     name = data.get("name")
     email = data.get("email")
     card_name = data.get("card_name", "Unknown")
+    price = "N/A"  # Placeholder until pricing is integrated
 
     # Log to DB
     try:
@@ -75,12 +76,7 @@ async def form_submitted(request: Request):
 
     # Send confirmation email
     try:
-        send_confirmation_email(
-            buyer_name=name,
-            to_email=email,
-            card_name=card_name,
-            shipping_address=address
-        )
+        send_confirmation_email(name, email, card_name, price, card_name)
     except Exception as e:
         logging.error(f"❌ Email send failed: {e}")
 
