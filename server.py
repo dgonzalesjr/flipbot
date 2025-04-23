@@ -6,26 +6,26 @@ from matchmaker import run_flipbot
 from ebay_order import place_ebay_order
 from db import init_db, log_submission
 from notifier import send_discord_alert
+from send_email import send_confirmation_email
 
 app = FastAPI()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Initialize SQLite database
+# Initialize PostgreSQL database
 init_db()
 
 # Allow GitHub Pages access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ⛔ TEMP ONLY
+    allow_origins=["https://dgonzalesjr.github.io"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# Routes
 @app.get("/")
 def home():
     return {"message": "FlipBot is alive!"}
@@ -39,12 +39,7 @@ def trigger():
 
 @app.post("/api/form-submitted")
 async def form_submitted(request: Request):
-    try:
-        data = await request.json()
-    except Exception as e:
-        logging.error(f"❌ Failed to parse JSON body: {e}")
-        return {"error": "Invalid JSON payload."}
-
+    data = await request.json()
     logging.info("📬 Received form submission.")
 
     item_id = data.get("ebay_item_id")
@@ -53,30 +48,36 @@ async def form_submitted(request: Request):
     email = data.get("email")
     card_name = data.get("card_name", "Unknown")
 
-    # Log to SQLite
+    # Log to DB
     try:
         log_submission(name, email, address, card_name, item_id)
-        logging.info("🗃 Submission logged in SQLite.")
+        logging.info("🗃 Submission logged in PostgreSQL.")
     except Exception as e:
         logging.error(f"❌ Failed to log submission: {e}")
 
     # Mask email for Discord
     buyer_mask = email.split("@")[0][:3] + "***" if email else "unknown"
 
-    # Attempt eBay order
+    # Attempt mock eBay order
     if item_id and address:
         logging.info(f"🚀 Attempting mock order for {card_name}")
         place_ebay_order(item_id, name, email, address)
     else:
         logging.warning("⚠️ Missing item_id or address. Order not placed.")
 
-    # Discord notification
+    # Discord alert
     send_discord_alert(
         card_name=card_name,
         price="Submitted",
         buyer_max=buyer_mask,
         url="Shipping form completed ✅"
     )
+
+    # Send confirmation email
+    try:
+        send_confirmation_email(name, email, card_name)
+    except Exception as e:
+        logging.error(f"❌ Email send failed: {e}")
 
     return {"status": "received"}
 
