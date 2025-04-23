@@ -6,7 +6,7 @@ from matchmaker import run_flipbot
 from ebay_order import place_ebay_order
 from db import init_db, log_submission
 from notifier import send_discord_alert
-from send_email import send_confirmation_email
+from emailer import send_confirmation_email
 
 app = FastAPI()
 
