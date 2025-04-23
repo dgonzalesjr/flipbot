@@ -75,7 +75,12 @@ async def form_submitted(request: Request):
 
     # Send confirmation email
     try:
-        send_confirmation_email(name, email, card_name)
+        send_confirmation_email(
+            buyer_name=name,
+            to_email=email,
+            card_name=card_name,
+            shipping_address=address
+        )
     except Exception as e:
         logging.error(f"❌ Email send failed: {e}")
 
