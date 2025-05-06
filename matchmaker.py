@@ -5,9 +5,10 @@ import sys
 import random
 from search_ebay_browse import search_ebay_items
 from logger import log_match
+from logger import log_evaluation  # New
 from notifier import send_discord_alert
 from utils.margin_calc import calculate_margin
-from stripe_checkout import create_checkout_session
+from card_evaluator import evaluate_card
 
 # Simulated buyer demand
 buyers = [
@@ -15,6 +16,9 @@ buyers = [
     {"card_name": "Charizard", "max_price": 1000},
     {"card_name": "Blaine's Arcanine", "max_price": 1000}
 ]
+
+# 🔘 Toggle test injection
+INJECT_TEST_CARD = True
 
 
 def match_listing(parsed_output, buyers):
@@ -28,7 +32,16 @@ def match_listing(parsed_output, buyers):
     for buyer in buyers:
         if buyer["card_name"].lower() in parsed["card_name"].lower():
             if parsed["price"] <= buyer["max_price"]:
-                # 🧠 Check profit margin
+
+                # 🧠 AI Evaluator: Check listing quality/value
+                evaluation = evaluate_card(parsed["card_name"], parsed["price"])
+                log_evaluation(evaluation, parsed.get("url", "N/A"))
+
+                if not evaluation["should_buy"]:
+                    print(f"🤖 Skipping {parsed['card_name']} — not profitable: {evaluation['reason']}")
+                    return f"⚠️ AI skipped: {parsed['card_name']} — {evaluation['reason']}"
+
+                # 📊 Margin check
                 result = calculate_margin(
                     ebay_price=parsed["price"],
                     stripe_sale_price=buyer["max_price"]
@@ -41,24 +54,17 @@ def match_listing(parsed_output, buyers):
                     )
                     return f"⚠️ Margin too low: {parsed['card_name']}"
 
-                # ✅ Create Stripe Checkout session
-                checkout_url = create_checkout_session(
-                    card_name=parsed["card_name"],
-                    price=buyer["max_price"],
-                    url=parsed.get("url", "https://example.com")
-                )
-
-                # ✅ Send alert
+                # ✅ Proceed with alert
                 send_discord_alert(
                     card_name=parsed["card_name"],
                     price=parsed["price"],
                     buyer_max=buyer["max_price"],
-                    url=checkout_url
+                    url=parsed.get("url", "https://example.com")
                 )
                 matched = True
                 break
 
-    # Log all listings
+    # Log all listings regardless of match
     log_match(
         card_name=parsed["card_name"],
         price=parsed["price"],
@@ -75,6 +81,18 @@ def match_listing(parsed_output, buyers):
 def match_from_browse_api(queries=None, limit=10):
     if queries is None:
         queries = ["Charizard", "Blastoise", "Lugia", "Shining Magikarp"]
+
+    # 🧪 Inject test card directly
+    if INJECT_TEST_CARD:
+        test_card = {
+            "card_name": "Charizard GX Mint Condition",
+            "price": 10.00,
+            "currency": "USD",
+            "url": "https://example.com/charizard"
+        }
+        print("\n🧪 Injecting test card for evaluation...")
+        match_message = match_listing(json.dumps(test_card), buyers)
+        print(match_message)
 
     for query in queries:
         print(f"\n🔍 Searching eBay for: {query}")

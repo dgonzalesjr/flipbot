@@ -54,6 +54,46 @@ def log_match(card_name, price, buyer_max, url):
         writer.writerow(row)
 
 
+def log_evaluation(evaluation: dict):
+    try:
+        sheet = get_google_sheet(sheet_name="FlipBot Evaluator Log", tab_name="evaluator_log")
+        sheet.append_row([
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            evaluation["title"],
+            evaluation["price"],
+            evaluation["resale_value"],
+            evaluation["condition"],
+            evaluation["grade"],
+            evaluation["profit_estimate"],
+            evaluation["should_buy"],
+            evaluation["reason"]
+        ])
+        print("🧠 Logged evaluation to separate Google Sheet.")
+    except Exception as e:
+        print(f"⚠️ Evaluation Google Sheets logging failed: {e}")
+
+    # Local fallback
+    file_exists = os.path.isfile("evaluation_log.csv")
+    with open("evaluation_log.csv", mode="a", newline="") as file:
+        writer = csv.writer(file)
+        if not file_exists:
+            writer.writerow([
+                "Timestamp", "Title", "Price", "Resale Value", "Condition", 
+                "Grade", "Profit Estimate", "Should Buy", "Reason"
+            ])
+        writer.writerow([
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            evaluation["title"],
+            evaluation["price"],
+            evaluation["resale_value"],
+            evaluation["condition"],
+            evaluation["grade"],
+            evaluation["profit_estimate"],
+            evaluation["should_buy"],
+            evaluation["reason"]
+        ])
+
+
 def open_csv():
     if platform.system() == "Darwin":  # macOS
         subprocess.call(["open", LOG_FILE])
